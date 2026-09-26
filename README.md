@@ -1,6 +1,6 @@
 # Synology Drive Unstuckerator
 
-![Unstuckerator: a light-blue D whose dark-blue left stem becomes an upward arrow](Brand/banner.png)
+![Synology Drive Unstuckerator: a dark-blue arrow beside a light-blue D](Brand/banner.png)
 
 Synology Drive Unstuckerator is a menu-bar utility for macOS. It watches folders you choose inside Synology Drive, records permanent File Provider upload failures, and can publish one verified retry copy of a file that Synology has stopped uploading.
 
@@ -12,7 +12,7 @@ This project is not affiliated with Synology Inc. Synology, Synology Drive, and 
 
 Synology Drive's File Provider sometimes leaves a file in a permanent upload failure (`NSFileProviderErrorDomain`, code `-2005`). The file is on disk and marked downloaded, but Drive does not finish the upload. Finder's own retry does not clear that state.
 
-Unstuckerator:
+Synology Drive Unstuckerator:
 
 1. Walks each watched folder, including nested folders, and asks `fileproviderctl evaluate` about eligible files that changed recently.
 2. Treats a file as needing attention only after two matching checks at least 60 seconds apart. A single `isUploading` flag is not treated as a failure.
@@ -37,8 +37,8 @@ The app is a menu-bar item. It is not sandboxed and it is not distributed throug
 
 The current build is on the [releases page](https://github.com/michaelsantos00/synology-drive-unstuckerator/releases). It is an Apple silicon app for macOS 15 or later, signed on this Mac only.
 
-1. Download `Unstuckerator-1.0.0-macOS.zip` and open it.
-2. Move `Unstuckerator.app` to your Applications folder.
+1. Download the macOS zip from the releases page and open it.
+2. Move `Synology Drive Unstuckerator.app` to your Applications folder.
 3. The first time you open it, macOS will say the developer cannot be verified. Control-click the app, choose Open, then choose Open again.
 
 ## Build and run the tests
@@ -53,10 +53,10 @@ swift test
 Scripts/package-app.sh
 ```
 
-That builds a release binary, assembles `Unstuckerator.app` in `~/Applications`, ad-hoc signs it, and opens it. Pass another destination if you want the bundle somewhere else:
+That builds a release binary, assembles `Synology Drive Unstuckerator.app` in `~/Applications`, ad-hoc signs it, and opens it. Pass another destination if you want the bundle somewhere else:
 
 ```bash
-Scripts/package-app.sh "$HOME/Desktop/Unstuckerator.app"
+Scripts/package-app.sh "$HOME/Desktop/Synology Drive Unstuckerator.app"
 ```
 
 The first open after signing sometimes fails with a launch-services error. The script opens the app a second time.
@@ -64,7 +64,7 @@ The first open after signing sometimes fails with a launch-services error. The s
 Quit the menu-bar app from its power button, or with:
 
 ```bash
-killall Unstuckerator
+osascript -e 'tell application "Synology Drive Unstuckerator" to quit'
 ```
 
 Do not signal `fileproviderd`, `cloud-drive-eventd`, or any other Synology process. Those are not part of this app.
@@ -87,13 +87,13 @@ All of this is outside the synced folder:
 
 | Path | Contents |
 | --- | --- |
-| `~/Library/Application Support/Unstuckerator/Store` | Local finding history |
-| `~/Library/Application Support/Unstuckerator/Staging` | Copies being prepared for publication |
-| `~/Library/Application Support/Unstuckerator/Undo` | Originals kept for 6 hours after a successful fix |
-| `~/Library/Application Support/Unstuckerator/Journals` | One JSON journal per fix attempt |
-| `~/Library/Logs/Unstuckerator` | Local log |
+| `~/Library/Application Support/Synology Drive Unstuckerator/Store` | Local finding history |
+| `~/Library/Application Support/Synology Drive Unstuckerator/Staging` | Copies being prepared for publication |
+| `~/Library/Application Support/Synology Drive Unstuckerator/Undo` | Originals kept for 6 hours after a successful fix |
+| `~/Library/Application Support/Synology Drive Unstuckerator/Journals` | One JSON journal per fix attempt |
+| `~/Library/Logs/Synology Drive Unstuckerator` | Local log |
 
-The first launch under this name moves a folder left behind by the earlier name, Synology Drive Monitor, if that folder is still there. Removing the app does not remove the folder. Delete `~/Library/Application Support/Unstuckerator` yourself when you want the history and the undo cache gone. Do that only after you no longer need Undo.
+The first launch under this name moves a folder left behind by an earlier name, `Unstuckerator` or `Synology Drive Monitor`, if that folder is still there. Removing the app does not remove the folder. Delete `~/Library/Application Support/Synology Drive Unstuckerator` yourself when you want the history and the undo cache gone. Do that only after you no longer need Undo.
 
 ## Safety limits
 

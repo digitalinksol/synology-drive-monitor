@@ -42,7 +42,7 @@ import Testing
         let repository = try FindingRepository(inMemory: false)
         _ = repository
         let store = FileManager.default.homeDirectoryForCurrentUser
-            .appendingPathComponent("Library/Application Support/Unstuckerator/Store/Findings.store")
+            .appendingPathComponent("Library/Application Support/Synology Drive Unstuckerator/Store/Findings.store")
         #expect(FileManager.default.fileExists(atPath: store.path))
         #expect(!store.path.contains("CloudStorage"))
     }

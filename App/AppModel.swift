@@ -542,7 +542,7 @@ public final class AppModel {
     public func copyDiagnostic(id: UUID) -> String {
         guard let finding = findings.first(where: { $0.id == id }) else { return "Finding unavailable." }
         return """
-        Unstuckerator
+        Synology Drive Unstuckerator
         File: \(finding.filename)
         Path: \(pathText(finding.canonicalPath))
         Size: \(finding.fileSize) bytes
@@ -568,7 +568,7 @@ public final class AppModel {
     }
 
     public func exportDiagnostic() {
-        let diagnostic = (["Unstuckerator", historicalProviderCountText, "Active uploads: \(activeUploadCount)"]
+        let diagnostic = (["Synology Drive Unstuckerator", historicalProviderCountText, "Active uploads: \(activeUploadCount)"]
             + findings.map { copyDiagnostic(id: $0.id) }).joined(separator: "\n\n")
         do {
             guard let export = callbacks.exportDiagnostic else { lastErrorText = "Diagnostic export is unavailable in this preview."; return }

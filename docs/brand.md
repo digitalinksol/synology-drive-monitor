@@ -2,16 +2,16 @@
 
 Synology Drive Unstuckerator gets a stuck upload moving again.
 
-The name is the product. Synology Drive is the system it works with. Unstuckerator is not made by Synology, and the mark is not their logo.
+The name is the product: Synology Drive Unstuckerator. Synology Drive is the system it works with. This app is not made by Synology, and the mark is not their logo.
 
 ## Mark
 
 `Brand/banner.png` is the brand image. It is 1408 by 704 pixels, exactly twice as wide as it is tall.
 
-The right side of the D is a round light-blue bowl, the same proportion as a normal D. The left stem is the shaft of an arrow, in dark blue. That shaft continues past the top of the D, and the arrowhead forms above it, pointing up. The name sits to the right of the mark, with “Synology Drive” above it. The field behind them carries a few very light gray waves.
+`Brand/mark.svg` is the mark used by the menu icon and the app icon. The arrowhead and the vertical stem are dark blue. The D bowl to their right is light blue. The banner places that same idea beside the name, with “Synology Drive” above “Unstuckerator,” on a field of very light gray waves.
 
 - `Brand/wordmark.svg` is the name, set in type. Do not redraw the letters.
-- `Brand/app-icon.png` is the app icon: the same mark, without the words, on a rounded square. The menu-bar icon is that mark in a single color.
+- `Brand/app-icon.png` is the app icon: the mark, without the words, on a rounded square. The menu-bar icon is the same mark, with the same two colors.
 
 Use the app icon at the sizes Apple already expects. Do not add a word inside the squircle. Do not stretch the squircle into a rectangle.
 
@@ -26,4 +26,4 @@ Use the app icon at the sizes Apple already expects. Do not add a word inside th
 
 ## Voice
 
-Short and plain. Say what happened to the file. "Unstuckerator" can stand alone. When you need a sentence: "Gets a stuck upload moving again."
+Short and plain. Say what happened to the file. Call the app Synology Drive Unstuckerator. When you need a sentence: "Gets a stuck upload moving again."

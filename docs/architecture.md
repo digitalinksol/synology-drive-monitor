@@ -1,12 +1,12 @@
 # Architecture
 
-Unstuckerator is a Swift package with three products:
+Synology Drive Unstuckerator is a Swift package with three products. The installed app is `Synology Drive Unstuckerator.app`.
 
 | Product | Role |
 | --- | --- |
 | `DriveMonitorCore` | Parsing, confirmation, watching, persistence, and the fix pipeline. No SwiftUI. |
 | `DriveMonitorUI` | Menu-bar UI, settings, notifications, and the manual Fix action. Sources live in `App/`. |
-| `Unstuckerator` | A tiny launcher in `AppLauncher/` that calls `SynologyDriveMonitorApp.main()`. |
+| `Unstuckerator` | Build target for the launcher in `AppLauncher/`. The packaged executable is named Synology Drive Unstuckerator. |
 
 The minimum system is macOS 15. Swift 6 language mode is on for every target. There are no third-party dependencies.
 

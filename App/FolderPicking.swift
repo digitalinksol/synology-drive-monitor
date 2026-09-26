@@ -16,7 +16,7 @@ public enum FolderPicking {
     public static func exportDiagnostic(_ text: String) throws {
         let panel = NSSavePanel()
         panel.title = "Export Diagnostic"
-        panel.nameFieldStringValue = "Unstuckerator Diagnostic.txt"
+        panel.nameFieldStringValue = "Synology Drive Unstuckerator Diagnostic.txt"
         guard panel.runModal() == .OK, let url = panel.url else { return }
         guard !url.resolvingSymlinksInPath().pathComponents.contains("CloudStorage") else {
             throw DiagnosticExportError.syncedDestination
