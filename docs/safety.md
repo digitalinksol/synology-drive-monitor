@@ -9,9 +9,9 @@ These rules are part of the product. They are not suggestions.
 - The undo cache keeps the original for 6 hours. Restore moves the current file aside inside the cache and moves the original back to its previous path.
 - Publish from a finished file staged outside `~/Library/CloudStorage`. Do not stream bytes directly into the Drive folder.
 - Prefer an APFS clone on the same volume. Fall back to a full copy only when the clone fails and a copy is still allowed.
-- SHA-256 the staged bytes and the published sibling. On mismatch, stop and keep the staged file.
+- SHA-256 the source bytes and the staged bytes before publication, and compare them. This is not a checksum of the published sibling or of the NAS copy. On mismatch, stop and keep the staged file for inspection.
 - One published sibling uses the suffix `.__requeued-<yyyyMMdd-HHmmss>` so it cannot be mistaken for the original.
-- A second Fix of a file that is still a confirmed failure is allowed. Automatic retry is still one attempt per source version (path, inode, size, and modification time).
+- A second Fix of a file that is still a confirmed failure is allowed. Automatic requeue is not available in the current build; monitoring and detection are automatic, the repair starts when the user presses Fix.
 
 ## What counts as a failure
 
@@ -36,8 +36,10 @@ These rules are part of the product. They are not suggestions.
 
 ## Disk space
 
-- Refuse a publication when available space is below the source size. That check cannot be disabled.
-- Also keep a reserve (20 GiB, floored at 1 GiB) unless the publication is a validated same-volume clone, which does not need a second full copy.
+- Refuse a publication on insufficient space. That check cannot be disabled.
+- When the same-volume clone check passed, the required headroom is the reserve (20 GiB, floored at 1 GiB), because a clone does not need a second full copy of the bytes.
+- Otherwise (no validated clone) require at least the greater of twice the source size and the source size plus the reserve.
+- Cross-volume staging is blocked outright.
 - Warn when free space is under 100 GiB. The warning does not by itself block a clone that passed the checks above.
 
 ## Scope of a watched root

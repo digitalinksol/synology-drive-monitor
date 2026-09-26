@@ -10,20 +10,20 @@ This project is not affiliated with Synology Inc. Synology, Synology Drive, and 
 
 ## What it does
 
-Synology Drive's File Provider sometimes leaves a file in a permanent upload failure (`NSFileProviderErrorDomain`, code `-2005`). The file is on disk and marked downloaded, but Drive does not finish the upload. Finder's own retry does not clear that state.
+Synology Drive's File Provider sometimes leaves a file in a permanent upload failure (`NSFileProviderErrorDomain`, code `-2005`). The file is on disk and marked downloaded, but Drive does not finish the upload. Finder's Retry is not one of the documented reset conditions.
 
 Synology Drive Unstuckerator:
 
 1. Walks each watched folder, including nested folders, and asks `fileproviderctl evaluate` about eligible files that changed recently.
 2. Treats a file as needing attention only after two matching checks at least 60 seconds apart. A single `isUploading` flag is not treated as a failure.
-3. Lets you press **Fix** on that file. Fix clones the file on the same volume when the filesystem allows it, otherwise copies it, checks the SHA-256 of both copies, and publishes one sibling next to the original.
+3. Lets you press **Fix** on that file. Fix tries a same-volume clone (APFS copy-on-write), falling back to a full copy only when the disk-space plan allows it, compares the SHA-256 of the source and the staged copy, and publishes one sibling next to the original.
 4. Waits until Synology reports that sibling uploaded and the upload error is gone.
 5. Moves the failed original into a local undo cache for 6 hours, then renames the uploaded sibling to the original name. If you quit while Synology is still uploading that sibling, the next **Check upload** verifies the same sibling instead of publishing another copy.
 6. Offers **Undo** during those 6 hours. Undo puts the archived original back and parks the replacement beside it in the cache.
 
 Nothing is removed before Synology reports the replacement uploaded. The original is not overwritten in place.
 
-Automatic retry stays off until you acknowledge files that were already failing when monitoring started. A manual Fix can be used again if that file is still a confirmed failure.
+Monitoring is automatic. In this build you start each repair yourself with **Fix**; automatic requeue is not available yet. Files that were already failing when monitoring started are listed for review rather than retried.
 
 ## Requirements
 
@@ -35,11 +35,11 @@ The app is a menu-bar item. It is not sandboxed and it is not distributed throug
 
 ## Download
 
-The current build is on the [releases page](https://github.com/michaelsantos00/synology-drive-unstuckerator/releases). It is an Apple silicon app for macOS 15 or later, signed on this Mac only.
+The current build is on the [releases page](https://github.com/michaelsantos00/synology-drive-unstuckerator/releases). It is an Apple silicon app for macOS 15 or later, ad-hoc signed, and not notarized.
 
 1. Download the macOS zip from the releases page and open it.
 2. Move `Synology Drive Unstuckerator.app` to your Applications folder.
-3. The first time you open it, macOS will say the developer cannot be verified. Control-click the app, choose Open, then choose Open again.
+3. The first time you open it, macOS blocks it because this build is ad-hoc signed and not notarized. Allow it once: open **System Settings > Privacy & Security**, scroll to the Security section, click **Open Anyway**, then confirm with **Open**. The older Control-click > Open shortcut no longer works on macOS 15 and later.
 
 ## Build and run the tests
 
@@ -99,15 +99,15 @@ The first launch under this name moves a folder left behind by an earlier name, 
 
 - The tool only runs `/usr/bin/fileproviderctl evaluate`. It does not run `fileproviderctl repair`.
 - Exit code 0 from `evaluate` is not treated as "healthy". The parser reads the first `fileproviderItems` dictionary and fails closed on output it does not understand.
-- A fix refuses to publish when free space is below the file size. That floor cannot be turned off. Cloning on the same volume does not need a second full copy of the bytes.
-- Hash mismatch, a cross-volume stage, or a failed move stops the attempt and leaves the staged file in place.
+- A fix refuses to publish on insufficient free space. When the same-volume clone check passes, the required headroom is the configured reserve (20 GiB by default, floored at 1 GiB), because a clone does not need a second full copy of the bytes. Otherwise it requires at least the greater of twice the file size and the file size plus reserve. Cross-volume staging is blocked.
+- The source and the staged copy are both SHA-256 hashed and compared before publication. This is not a checksum of the file on the NAS. A hash mismatch or a failed move stops the attempt and leaves the staged file in place for inspection; a cross-volume stage is blocked before staging begins.
 - This repository must not be added as a watched root. It is source code, not a Drive library.
 
 More detail is in [docs/safety.md](docs/safety.md) and [docs/architecture.md](docs/architecture.md).
 
 ## License
 
-Source is published under the [PolyForm Noncommercial License 1.0.0](LICENSE.md).
+Source is published under the [PolyForm Noncommercial License 1.0.0](LICENSE.md). That is a **source-available** license, not an OSI-approved open source license, because it does not permit commercial use.
 
 You may use, study, modify, and share this software for noncommercial purposes, including personal use, research, hobby projects, and use by schools, charities, public research organizations, and government institutions.
 

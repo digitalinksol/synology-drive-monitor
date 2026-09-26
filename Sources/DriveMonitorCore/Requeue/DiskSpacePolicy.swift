@@ -1,7 +1,8 @@
 import Foundation
 
-/// Refuses a publication when free space is below the file size. That floor cannot be turned off.
-/// A validated same-volume clone does not need a second full copy of the bytes.
+/// Refuses a publication on insufficient free space. That check cannot be turned off.
+/// A validated same-volume clone needs only the configured reserve. Otherwise the
+/// requirement is at least twice the source size and the source size plus the reserve.
 
 public struct DiskAllowance: Equatable, Sendable {
     public var allowFullCopyFallback: Bool

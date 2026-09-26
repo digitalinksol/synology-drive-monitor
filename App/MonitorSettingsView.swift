@@ -13,8 +13,8 @@ public struct MonitorSettingsView: View {
                     .disabled(model.needsRootConfirmation)
                 Toggle("Automatic requeue enabled", isOn: .constant(false))
                     .disabled(true)
-                    .accessibilityHint("Automatic requeue stays off until you review the first-launch baseline.")
-                Text("Automatic requeue stays off until you review the first-launch baseline. Requeue copies the file, and after Synology reports that copy uploaded, removes the failed original and renames the copy to the original name.")
+                    .accessibilityHint("Automatic requeue is not available in this build.")
+                Text("Automatic requeue is not available in this build. Monitoring and detection are automatic; each repair starts when you press Fix.")
                     .font(.caption).foregroundStyle(.secondary)
                 Toggle("Desktop notifications enabled", isOn: Binding(get: { model.desktopNotificationsEnabled }, set: { model.setNotificationsEnabled($0) }))
             }
